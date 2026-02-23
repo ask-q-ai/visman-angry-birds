@@ -1,0 +1,804 @@
+{
+  "initial_vm_state": {
+    "score": 0,
+    "vx": 350,
+    "vy": -350,
+    "birdsLeft": 3,
+    "gameStarted": false,
+    "victory": false,
+    "pig1Alive": true,
+    "pig2Alive": true,
+    "pig3Alive": true
+  },
+  "canvasLayer": [
+    {
+      "id": "bg",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "width": 640,
+        "height": 360
+      },
+      "style": {
+        "fillStyle": "#87CEEB",
+        "strokeStyle": "rgba(0,0,0,0)",
+        "lineWidth": 0
+      }
+    },
+    {
+      "id": "ground",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 0,
+        "y": 320
+      },
+      "size": {
+        "width": 640,
+        "height": 40
+      },
+      "style": {
+        "fillStyle": "#4d3319",
+        "strokeStyle": "#228B22",
+        "lineWidth": 4
+      },
+      "physics": {
+        "bodyType": "static",
+        "friction": 0.8
+      },
+      "collision": {
+        "collisionGroups": [
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "slingshot-back",
+      "context": "canvas",
+      "type": "line",
+      "position": {
+        "x": 100,
+        "y": 320
+      },
+      "properties": {
+        "x2": 100,
+        "y2": 260
+      },
+      "style": {
+        "strokeStyle": "#5d4037",
+        "lineWidth": 8
+      }
+    },
+    {
+      "id": "slingshot-fork-left",
+      "context": "canvas",
+      "type": "line",
+      "position": {
+        "x": 100,
+        "y": 260
+      },
+      "properties": {
+        "x2": 80,
+        "y2": 230
+      },
+      "style": {
+        "strokeStyle": "#5d4037",
+        "lineWidth": 6
+      }
+    },
+    {
+      "id": "slingshot-fork-right",
+      "context": "canvas",
+      "type": "line",
+      "position": {
+        "x": 100,
+        "y": 260
+      },
+      "properties": {
+        "x2": 120,
+        "y2": 230
+      },
+      "style": {
+        "strokeStyle": "#5d4037",
+        "lineWidth": 6
+      }
+    },
+    {
+      "id": "controller",
+      "context": "canvas",
+      "type": "circle",
+      "position": {
+        "x": 100,
+        "y": 245
+      },
+      "size": {
+        "radius": 12
+      },
+      "style": {
+        "fillStyle": "#FF5252",
+        "strokeStyle": "#B71C1C",
+        "lineWidth": 2
+      },
+      "callbacks": {
+        "onKeyDown": {
+          "Space": "launch"
+        },
+        "onKeyHeld": {
+          "ArrowUp": "aim_up",
+          "ArrowDown": "aim_down",
+          "ArrowLeft": "power_less",
+          "ArrowRight": "power_more"
+        }
+      },
+      "actions": {
+        "aim_up": {
+          "stateMutations": [
+            {
+              "path": "vm.vy",
+              "operation": "decrement",
+              "value": 5
+            }
+          ]
+        },
+        "aim_down": {
+          "stateMutations": [
+            {
+              "path": "vm.vy",
+              "operation": "increment",
+              "value": 5
+            }
+          ]
+        },
+        "power_more": {
+          "stateMutations": [
+            {
+              "path": "vm.vx",
+              "operation": "increment",
+              "value": 5
+            }
+          ]
+        },
+        "power_less": {
+          "stateMutations": [
+            {
+              "path": "vm.vx",
+              "operation": "decrement",
+              "value": 5
+            }
+          ]
+        },
+        "launch": {
+          "stateMutations": [
+            {
+              "path": "vm.birdsLeft",
+              "operation": "decrement",
+              "value": 1
+            }
+          ],
+          "spawn": {
+            "template": {
+              "type": "circle",
+              "size": {
+                "radius": 10
+              },
+              "style": {
+                "fillStyle": "#FF5252",
+                "strokeStyle": "#222222",
+                "lineWidth": 1
+              },
+              "physics": {
+                "kinematic": true,
+                "bodyType": "dynamic",
+                "vx": "{{ @vm.vx }}",
+                "vy": "{{ @vm.vy }}",
+                "ay": 800,
+                "bounce": 0.3,
+                "friction": 0.2,
+                "destroyOutOfBounds": true
+              },
+              "collision": {
+                "collisionGroups": [
+                  "bird"
+                ],
+                "collidesWith": [
+                  "structure",
+                  "pig",
+                  "ground"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "block_0_l",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 425.0,
+        "y": 260.0
+      },
+      "size": {
+        "width": 10.0,
+        "height": 60.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "block_0_r",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 465.0,
+        "y": 260.0
+      },
+      "size": {
+        "width": 10.0,
+        "height": 60.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "roof_0",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 420.0,
+        "y": 250.0
+      },
+      "size": {
+        "width": 60.0,
+        "height": 10.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "block_1_l",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 425.0,
+        "y": 190.0
+      },
+      "size": {
+        "width": 10.0,
+        "height": 60.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "block_1_r",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 465.0,
+        "y": 190.0
+      },
+      "size": {
+        "width": 10.0,
+        "height": 60.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "roof_1",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 420.0,
+        "y": 180.0
+      },
+      "size": {
+        "width": 60.0,
+        "height": 10.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "block_2_l",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 425.0,
+        "y": 120.0
+      },
+      "size": {
+        "width": 10.0,
+        "height": 60.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "block_2_r",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 465.0,
+        "y": 120.0
+      },
+      "size": {
+        "width": 10.0,
+        "height": 60.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "roof_2",
+      "context": "canvas",
+      "type": "rectangle",
+      "position": {
+        "x": 420.0,
+        "y": 110.0
+      },
+      "size": {
+        "width": 60.0,
+        "height": 10.0
+      },
+      "style": {
+        "fillStyle": "#A1887F",
+        "strokeStyle": "#5D4037",
+        "lineWidth": 1
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "friction": 0.5,
+        "bounce": 0.1,
+        "fixedRotation": false
+      },
+      "collision": {
+        "collisionGroups": [
+          "structure"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "pig",
+          "ground"
+        ]
+      }
+    },
+    {
+      "id": "pig1",
+      "context": "canvas",
+      "type": "circle",
+      "position": {
+        "x": 450.0,
+        "y": 250.0
+      },
+      "size": {
+        "radius": 12
+      },
+      "showWhen": {
+        "@vm.pig1Alive": true
+      },
+      "style": {
+        "fillStyle": "#81C784",
+        "strokeStyle": "#2E7D32",
+        "lineWidth": 2
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "bounce": 0.2
+      },
+      "collision": {
+        "collisionGroups": [
+          "pig"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "ground"
+        ],
+        "onCollision": "die",
+        "stateMutations": [
+          {
+            "path": "vm.pig1Alive",
+            "operation": "set",
+            "value": false
+          },
+          {
+            "path": "vm.score",
+            "operation": "increment",
+            "value": 500
+          }
+        ]
+      },
+      "actions": {
+        "die": {
+          "destroy": true
+        }
+      }
+    },
+    {
+      "id": "pig2",
+      "context": "canvas",
+      "type": "circle",
+      "position": {
+        "x": 450.0,
+        "y": 170.0
+      },
+      "size": {
+        "radius": 12
+      },
+      "showWhen": {
+        "@vm.pig2Alive": true
+      },
+      "style": {
+        "fillStyle": "#81C784",
+        "strokeStyle": "#2E7D32",
+        "lineWidth": 2
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "bounce": 0.2
+      },
+      "collision": {
+        "collisionGroups": [
+          "pig"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "ground"
+        ],
+        "onCollision": "die",
+        "stateMutations": [
+          {
+            "path": "vm.pig2Alive",
+            "operation": "set",
+            "value": false
+          },
+          {
+            "path": "vm.score",
+            "operation": "increment",
+            "value": 500
+          }
+        ]
+      },
+      "actions": {
+        "die": {
+          "destroy": true
+        }
+      }
+    },
+    {
+      "id": "pig3",
+      "context": "canvas",
+      "type": "circle",
+      "position": {
+        "x": 520.0,
+        "y": 300.0
+      },
+      "size": {
+        "radius": 12
+      },
+      "showWhen": {
+        "@vm.pig3Alive": true
+      },
+      "style": {
+        "fillStyle": "#81C784",
+        "strokeStyle": "#2E7D32",
+        "lineWidth": 2
+      },
+      "physics": {
+        "kinematic": true,
+        "bodyType": "dynamic",
+        "ay": 800,
+        "bounce": 0.2
+      },
+      "collision": {
+        "collisionGroups": [
+          "pig"
+        ],
+        "collidesWith": [
+          "bird",
+          "structure",
+          "ground"
+        ],
+        "onCollision": "die",
+        "stateMutations": [
+          {
+            "path": "vm.pig3Alive",
+            "operation": "set",
+            "value": false
+          },
+          {
+            "path": "vm.score",
+            "operation": "increment",
+            "value": 500
+          }
+        ]
+      },
+      "actions": {
+        "die": {
+          "destroy": true
+        }
+      }
+    }
+  ],
+  "domLayer": [
+    {
+      "id": "ui-score",
+      "context": "dom",
+      "type": "div",
+      "position": {
+        "x": 20,
+        "y": 20
+      },
+      "properties": {
+        "text": "SCORE: {{ @vm.score }}"
+      },
+      "style": {
+        "color": "#FFFFFF",
+        "fontSize": 24,
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "ui-birds",
+      "context": "dom",
+      "type": "div",
+      "position": {
+        "x": 20,
+        "y": 50
+      },
+      "properties": {
+        "text": "BIRDS: {{ @vm.birdsLeft }}"
+      },
+      "style": {
+        "color": "#FFCDD2",
+        "fontSize": 18
+      }
+    },
+    {
+      "id": "ui-aim",
+      "context": "dom",
+      "type": "div",
+      "position": {
+        "x": 20,
+        "y": 280
+      },
+      "properties": {
+        "text": "AIM: ↑/↓  POWER: ←/→"
+      },
+      "style": {
+        "color": "#FFFFFF",
+        "fontSize": 14
+      }
+    },
+    {
+      "id": "ui-launch",
+      "context": "dom",
+      "type": "div",
+      "position": {
+        "x": 20,
+        "y": 300
+      },
+      "properties": {
+        "text": "SPACE TO LAUNCH"
+      },
+      "style": {
+        "color": "#FFEB3B",
+        "fontSize": 16,
+        "fontWeight": "bold"
+      }
+    },
+    {
+      "id": "victory",
+      "context": "dom",
+      "type": "div",
+      "position": {
+        "x": 200,
+        "y": 150
+      },
+      "showWhen": {
+        "@vm.pig1Alive": false,
+        "@vm.pig2Alive": false,
+        "@vm.pig3Alive": false
+      },
+      "properties": {
+        "text": "VICTORY!"
+      },
+      "style": {
+        "color": "#FFEB3B",
+        "fontSize": 64,
+        "fontWeight": "bold"
+      }
+    }
+  ]
+}
