@@ -7,9 +7,9 @@
     "birds"
   ],
   "source": "flutter-embedded-demo",
-  "generatedAt": "2026-02-23T08:11:45.557246Z",
-  "sceneFile": "visman.json",
-  "objectCount": 23,
+  "generatedAt": "2026-03-01T11:16:37.081133Z",
+  "sceneFile": "scene.yaml",
+  "objectCount": 66,
   "hasPhysics": true,
   "has3D": false
 }

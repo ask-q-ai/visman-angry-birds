@@ -1,0 +1,1441 @@
+---
+stateConstraints:
+- path: vm.vx
+  mode: clamp
+  min: 220
+  max: 560
+- path: vm.vy
+  mode: clamp
+  min: -520
+  max: -170
+- path: vm.birdsLeft
+  mode: clamp
+  min: 0
+  max: 6
+initial_vm_state:
+  score: 0
+  vx: 360
+  vy: -320
+  birdsLeft: 5
+  gameStarted: false
+  gameOver: false
+  victory: false
+  defeat: false
+  canLaunch: true
+  pig1Alive: true
+  pig2Alive: true
+  pig3Alive: true
+canvasLayer:
+- id: sky
+  context: canvas
+  type: rectangle
+  position:
+    x: 0
+    y: 0
+  size:
+    width: 640
+    height: 360
+  style:
+    fillStyle: "#7ECAFF"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: haze
+  context: canvas
+  type: rectangle
+  position:
+    x: 0
+    y: 150
+  size:
+    width: 640
+    height: 210
+  style:
+    fillStyle: "#A6DBFF"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: sun
+  context: canvas
+  type: circle
+  position:
+    x: 544
+    y: 76
+  size:
+    radius: 34
+  style:
+    fillStyle: "#FFE082"
+    strokeStyle: "#FFCA28"
+    lineWidth: 3
+- id: cloud-1a
+  context: canvas
+  type: circle
+  position:
+    x: 122
+    y: 74
+  size:
+    radius: 18
+  style:
+    fillStyle: "#F9FDFF"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: cloud-1b
+  context: canvas
+  type: circle
+  position:
+    x: 142
+    y: 72
+  size:
+    radius: 16
+  style:
+    fillStyle: "#F9FDFF"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: cloud-1c
+  context: canvas
+  type: circle
+  position:
+    x: 104
+    y: 72
+  size:
+    radius: 14
+  style:
+    fillStyle: "#F9FDFF"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: cloud-2a
+  context: canvas
+  type: circle
+  position:
+    x: 262
+    y: 114
+  size:
+    radius: 16
+  style:
+    fillStyle: "#F9FDFF"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: cloud-2b
+  context: canvas
+  type: circle
+  position:
+    x: 280
+    y: 112
+  size:
+    radius: 13
+  style:
+    fillStyle: "#F9FDFF"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: hill-left
+  context: canvas
+  type: circle
+  position:
+    x: 110
+    y: 360
+  size:
+    radius: 120
+  style:
+    fillStyle: "#92C56E"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: hill-right
+  context: canvas
+  type: circle
+  position:
+    x: 580
+    y: 360
+  size:
+    radius: 110
+  style:
+    fillStyle: "#89BD62"
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+- id: grass-strip
+  context: canvas
+  type: rectangle
+  position:
+    x: 0
+    y: 312
+  size:
+    width: 640
+    height: 8
+  style:
+    fillStyle: "#5FAE3F"
+    strokeStyle: "#3A7A26"
+    lineWidth: 1
+  physics:
+    bodyType: static
+    friction: 0.95
+  collision:
+    collisionGroups:
+    - ground
+    collidesWith:
+    - bird
+    - structure
+- id: ground
+  context: canvas
+  type: rectangle
+  position:
+    x: 0
+    y: 320
+  size:
+    width: 640
+    height: 40
+  style:
+    fillStyle: "#7A4E2D"
+    strokeStyle: "#4F2F16"
+    lineWidth: 2
+  physics:
+    bodyType: static
+    friction: 0.9
+  collision:
+    collisionGroups:
+    - ground
+    collidesWith:
+    - bird
+    - structure
+- id: sling-post-back
+  context: canvas
+  type: rectangle
+  position:
+    x: 102
+    y: 228
+  size:
+    width: 12
+    height: 84
+  style:
+    fillStyle: "#8A5936"
+    strokeStyle: "#4E2B16"
+    lineWidth: 2
+- id: sling-fork-left
+  context: canvas
+  type: rectangle
+  position:
+    x: 93
+    y: 206
+  size:
+    width: 10
+    height: 34
+  style:
+    fillStyle: "#8A5936"
+    strokeStyle: "#4E2B16"
+    lineWidth: 2
+- id: sling-fork-right
+  context: canvas
+  type: rectangle
+  position:
+    x: 115
+    y: 206
+  size:
+    width: 10
+    height: 34
+  style:
+    fillStyle: "#8A5936"
+    strokeStyle: "#4E2B16"
+    lineWidth: 2
+- id: sling-band-back
+  context: canvas
+  type: line
+  position:
+    x: 98
+    y: 214
+  size:
+    width: 1
+    height: 1
+  properties:
+    x2: "{{ 112 - ((@vm.vx - 360) * 0.15) }}"
+    y2: "{{ 252 - ((@vm.vy + 320) * 0.10) }}"
+  style:
+    strokeStyle: "#5A2E17"
+    lineWidth: 4
+- id: sling-band-front
+  context: canvas
+  type: line
+  position:
+    x: 120
+    y: 214
+  size:
+    width: 1
+    height: 1
+  properties:
+    x2: "{{ 112 - ((@vm.vx - 360) * 0.15) }}"
+    y2: "{{ 252 - ((@vm.vy + 320) * 0.10) }}"
+  style:
+    strokeStyle: "#6B3A20"
+    lineWidth: 4
+- id: sling-cradle
+  context: canvas
+  type: line
+  position:
+    x: "{{ (112 - ((@vm.vx - 360) * 0.15)) - 7 }}"
+    y: "{{ (252 - ((@vm.vy + 320) * 0.10)) + 3 }}"
+  size:
+    width: 1
+    height: 1
+  properties:
+    x2: "{{ (112 - ((@vm.vx - 360) * 0.15)) + 7 }}"
+    y2: "{{ (252 - ((@vm.vy + 320) * 0.10)) + 3 }}"
+  style:
+    strokeStyle: "#3E1E11"
+    lineWidth: 2
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+- id: trajectory-dot-1
+  context: canvas
+  type: circle
+  position:
+    x: "{{ (112 - ((@vm.vx - 360) * 0.15)) + (@vm.vx * 0.18) }}"
+    y: "{{ (252 - ((@vm.vy + 320) * 0.10)) + (@vm.vy * 0.18) + (0.5 * 900.0 * 0.18
+      * 0.18) }}"
+  size:
+    radius: 3.2
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+  style:
+    fillStyle: "#FFF8E1"
+    strokeStyle: "#FFB300"
+    lineWidth: 1
+- id: trajectory-dot-2
+  context: canvas
+  type: circle
+  position:
+    x: "{{ (112 - ((@vm.vx - 360) * 0.15)) + (@vm.vx * 0.30) }}"
+    y: "{{ (252 - ((@vm.vy + 320) * 0.10)) + (@vm.vy * 0.30) + (0.5 * 900.0 * 0.30
+      * 0.30) }}"
+  size:
+    radius: 2.6
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+  style:
+    fillStyle: "#FFF8E1"
+    strokeStyle: "#FFB300"
+    lineWidth: 1
+- id: trajectory-dot-3
+  context: canvas
+  type: circle
+  position:
+    x: "{{ (112 - ((@vm.vx - 360) * 0.15)) + (@vm.vx * 0.42) }}"
+    y: "{{ (252 - ((@vm.vy + 320) * 0.10)) + (@vm.vy * 0.42) + (0.5 * 900.0 * 0.42
+      * 0.42) }}"
+  size:
+    radius: 2.1
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+  style:
+    fillStyle: "#FFF8E1"
+    strokeStyle: "#FFB300"
+    lineWidth: 1
+- id: controller
+  context: canvas
+  type: circle
+  position:
+    x: "{{ 112 - ((@vm.vx - 360) * 0.15) }}"
+    y: "{{ 252 - ((@vm.vy + 320) * 0.10) }}"
+  size:
+    radius: 12
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+  style:
+    fillStyle: "#E53935"
+    strokeStyle: "#7F1D1D"
+    lineWidth: 2
+  callbacks:
+    onClick: launch
+    onHover: aim_to_pointer
+    onKeyDown:
+      Space: launch
+      Enter: launch
+      r: restart_game
+    onKeyHeld:
+      ArrowUp: aim_up
+      ArrowDown: aim_down
+      ArrowLeft: power_less
+      ArrowRight: power_more
+  actions:
+    aim_up:
+      stateMutations:
+      - path: vm.vy
+        operation: decrement
+        value: 10
+    aim_down:
+      stateMutations:
+      - path: vm.vy
+        operation: increment
+        value: 10
+    power_more:
+      stateMutations:
+      - path: vm.vx
+        operation: increment
+        value: 10
+    power_less:
+      stateMutations:
+      - path: vm.vx
+        operation: decrement
+        value: 10
+    aim_to_pointer:
+      stateMutations:
+      - path: vm.vx
+        operation: set
+        value: "{{ 260 + (112 - @vm.input.pointer.x) * 3.4 }}"
+      - path: vm.vy
+        operation: set
+        value: "{{ -200 - (252 - @vm.input.pointer.y) * 3.0 }}"
+    launch:
+      spawn:
+        template:
+          type: circle
+          size:
+            radius: 11
+          style:
+            fillStyle: "#E53935"
+            strokeStyle: "#3E2723"
+            lineWidth: 2
+          physics:
+            kinematic: true
+            bodyType: dynamic
+            vx: "{{ @vm.vx }}"
+            vy: "{{ @vm.vy }}"
+            ay: 900
+            bounce: 0.22
+            friction: 0.24
+            drag: 0.02
+            destroyOutOfBounds: true
+            bounds:
+              minX: -100
+              maxX: 760
+              minY: -140
+              maxY: 420
+          effects:
+            trail: smoke-trail
+            onDestroy: burst
+          collision:
+            collisionGroups:
+            - bird
+            collidesWith:
+            - structure
+            - pig
+            - ground
+      stateMutations:
+      - path: vm.birdsLeft
+        operation: decrement
+        value: 1
+      - path: vm.canLaunch
+        operation: set
+        value: "{{ (@vm.birdsLeft > 0) && !@vm.gameOver }}"
+      - path: vm.gameStarted
+        operation: set
+        value: true
+    restart_game:
+      restart: true
+- id: controller-eye
+  context: canvas
+  type: circle
+  position:
+    x: "{{ (112 - ((@vm.vx - 360) * 0.15)) + 3.4 }}"
+    y: "{{ (252 - ((@vm.vy + 320) * 0.10)) - 4.0 }}"
+  size:
+    radius: 3.0
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+  style:
+    fillStyle: "#FFFFFF"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: controller-pupil
+  context: canvas
+  type: circle
+  position:
+    x: "{{ (112 - ((@vm.vx - 360) * 0.15)) + 4.3 }}"
+    y: "{{ (252 - ((@vm.vy + 320) * 0.10)) - 4.0 }}"
+  size:
+    radius: 1.3
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+  style:
+    fillStyle: "#111111"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: controller-beak
+  context: canvas
+  type: circle
+  position:
+    x: "{{ (112 - ((@vm.vx - 360) * 0.15)) + 9.2 }}"
+    y: "{{ (252 - ((@vm.vy + 320) * 0.10)) + 1.8 }}"
+  size:
+    radius: 3.8
+  showWhen:
+    "@vm.canLaunch": true
+    "@vm.gameOver": false
+  style:
+    fillStyle: "#FFB74D"
+    strokeStyle: "#D97706"
+    lineWidth: 1
+- id: l1-left-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 420.0
+    y: 252.0
+  size:
+    width: 16.0
+    height: 60.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: l1-right-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 488.0
+    y: 252.0
+  size:
+    width: 16.0
+    height: 60.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: l1-beam
+  context: canvas
+  type: rectangle
+  position:
+    x: 415.0
+    y: 240.0
+  size:
+    width: 98.0
+    height: 12.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: l2-left-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 438.0
+    y: 194.0
+  size:
+    width: 14.0
+    height: 46.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 2.0
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: l2-right-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 466.0
+    y: 194.0
+  size:
+    width: 14.0
+    height: 46.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 2.0
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: l2-beam
+  context: canvas
+  type: rectangle
+  position:
+    x: 432.0
+    y: 182.0
+  size:
+    width: 60.0
+    height: 12.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 2.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: r1-left-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 548.0
+    y: 252.0
+  size:
+    width: 16.0
+    height: 60.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: r1-right-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 602.0
+    y: 252.0
+  size:
+    width: 16.0
+    height: 60.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: r1-beam
+  context: canvas
+  type: rectangle
+  position:
+    x: 542.0
+    y: 240.0
+  size:
+    width: 86.0
+    height: 12.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: r2-center-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 576.0
+    y: 206.0
+  size:
+    width: 14.0
+    height: 38.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 2.2
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: r2-beam
+  context: canvas
+  type: rectangle
+  position:
+    x: 566.0
+    y: 194.0
+  size:
+    width: 34.0
+    height: 12.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 2.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: r2-boulder
+  context: canvas
+  type: circle
+  position:
+    x: 583.0
+    y: 176.0
+  size:
+    radius: 14.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 2.6
+    friction: 0.55
+    bounce: 0.12
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: c1-left-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 312.0
+    y: 236.0
+  size:
+    width: 14.0
+    height: 76.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: c1-right-col
+  context: canvas
+  type: rectangle
+  position:
+    x: 366.0
+    y: 236.0
+  size:
+    width: 14.0
+    height: 76.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: c1-beam
+  context: canvas
+  type: rectangle
+  position:
+    x: 306.0
+    y: 224.0
+  size:
+    width: 84.0
+    height: 12.0
+  style:
+    fillStyle: "#C58C55"
+    strokeStyle: "#7A4B2C"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.4
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: crate-a
+  context: canvas
+  type: rectangle
+  position:
+    x: 446.0
+    y: 296.0
+  size:
+    width: 24.0
+    height: 24.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.8
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: crate-b
+  context: canvas
+  type: rectangle
+  position:
+    x: 472.0
+    y: 296.0
+  size:
+    width: 24.0
+    height: 24.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.8
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: crate-c
+  context: canvas
+  type: rectangle
+  position:
+    x: 562.0
+    y: 296.0
+  size:
+    width: 24.0
+    height: 24.0
+  style:
+    fillStyle: "#B0BEC5"
+    strokeStyle: "#607D8B"
+    lineWidth: 2
+  physics:
+    kinematic: true
+    bodyType: dynamic
+    ay: 900
+    mass: 1.8
+    friction: 0.75
+    bounce: 0.08
+    fixedRotation: false
+  collision:
+    collisionGroups:
+    - structure
+    collidesWith:
+    - bird
+    - structure
+    - pig
+    - ground
+- id: pig1
+  context: canvas
+  type: circle
+  position:
+    x: 462.0
+    y: 270.0
+  size:
+    radius: 12
+  showWhen:
+    "@vm.pig1Alive": true
+  style:
+    fillStyle: "#8BC34A"
+    strokeStyle: "#33691E"
+    lineWidth: 2
+  physics:
+    bodyType: static
+  collision:
+    collisionGroups:
+    - pig
+    collidesWith:
+    - bird
+    - structure
+    triggerOnce: true
+    onCollision: die
+    stateMutations:
+    - path: vm.pig1Alive
+      operation: set
+      value: false
+    - path: vm.score
+      operation: increment
+      value: 800
+  effects:
+    onDestroy: confetti
+  actions:
+    die:
+      destroy: true
+- id: pig1-eye-left
+  context: canvas
+  type: circle
+  position:
+    x: 458.2
+    y: 267.6
+  size:
+    radius: 2.2
+  showWhen:
+    "@vm.pig1Alive": true
+  style:
+    fillStyle: "#FFFFFF"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: pig1-eye-right
+  context: canvas
+  type: circle
+  position:
+    x: 465.8
+    y: 267.6
+  size:
+    radius: 2.2
+  showWhen:
+    "@vm.pig1Alive": true
+  style:
+    fillStyle: "#FFFFFF"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: pig1-snout
+  context: canvas
+  type: circle
+  position:
+    x: 462.0
+    y: 272.8
+  size:
+    radius: 4.2
+  showWhen:
+    "@vm.pig1Alive": true
+  style:
+    fillStyle: "#AED581"
+    strokeStyle: "#558B2F"
+    lineWidth: 1
+- id: pig2
+  context: canvas
+  type: circle
+  position:
+    x: 580.0
+    y: 272.0
+  size:
+    radius: 12
+  showWhen:
+    "@vm.pig2Alive": true
+  style:
+    fillStyle: "#8BC34A"
+    strokeStyle: "#33691E"
+    lineWidth: 2
+  physics:
+    bodyType: static
+  collision:
+    collisionGroups:
+    - pig
+    collidesWith:
+    - bird
+    - structure
+    triggerOnce: true
+    onCollision: die
+    stateMutations:
+    - path: vm.pig2Alive
+      operation: set
+      value: false
+    - path: vm.score
+      operation: increment
+      value: 800
+  effects:
+    onDestroy: confetti
+  actions:
+    die:
+      destroy: true
+- id: pig2-eye-left
+  context: canvas
+  type: circle
+  position:
+    x: 576.2
+    y: 269.6
+  size:
+    radius: 2.2
+  showWhen:
+    "@vm.pig2Alive": true
+  style:
+    fillStyle: "#FFFFFF"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: pig2-eye-right
+  context: canvas
+  type: circle
+  position:
+    x: 583.8
+    y: 269.6
+  size:
+    radius: 2.2
+  showWhen:
+    "@vm.pig2Alive": true
+  style:
+    fillStyle: "#FFFFFF"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: pig2-snout
+  context: canvas
+  type: circle
+  position:
+    x: 580.0
+    y: 274.8
+  size:
+    radius: 4.2
+  showWhen:
+    "@vm.pig2Alive": true
+  style:
+    fillStyle: "#AED581"
+    strokeStyle: "#558B2F"
+    lineWidth: 1
+- id: pig3
+  context: canvas
+  type: circle
+  position:
+    x: 346.0
+    y: 208.0
+  size:
+    radius: 12
+  showWhen:
+    "@vm.pig3Alive": true
+  style:
+    fillStyle: "#8BC34A"
+    strokeStyle: "#33691E"
+    lineWidth: 2
+  physics:
+    bodyType: static
+  collision:
+    collisionGroups:
+    - pig
+    collidesWith:
+    - bird
+    - structure
+    triggerOnce: true
+    onCollision: die
+    stateMutations:
+    - path: vm.pig3Alive
+      operation: set
+      value: false
+    - path: vm.score
+      operation: increment
+      value: 800
+  effects:
+    onDestroy: confetti
+  actions:
+    die:
+      destroy: true
+- id: pig3-eye-left
+  context: canvas
+  type: circle
+  position:
+    x: 342.2
+    y: 205.6
+  size:
+    radius: 2.2
+  showWhen:
+    "@vm.pig3Alive": true
+  style:
+    fillStyle: "#FFFFFF"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: pig3-eye-right
+  context: canvas
+  type: circle
+  position:
+    x: 349.8
+    y: 205.6
+  size:
+    radius: 2.2
+  showWhen:
+    "@vm.pig3Alive": true
+  style:
+    fillStyle: "#FFFFFF"
+    strokeStyle: "#111111"
+    lineWidth: 1
+- id: pig3-snout
+  context: canvas
+  type: circle
+  position:
+    x: 346.0
+    y: 210.8
+  size:
+    radius: 4.2
+  showWhen:
+    "@vm.pig3Alive": true
+  style:
+    fillStyle: "#AED581"
+    strokeStyle: "#558B2F"
+    lineWidth: 1
+- id: game-manager
+  context: canvas
+  type: circle
+  position:
+    x: -80
+    y: -80
+  size:
+    radius: 1
+  style:
+    fillStyle: rgba(0,0,0,0)
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+  callbacks:
+    onInterval:
+      seconds: 0.1
+      action: tick
+  actions:
+    tick:
+      stateMutations:
+      - path: vm.victory
+        operation: set
+        value: "{{ (!@vm.pig1Alive) && (!@vm.pig2Alive) && (!@vm.pig3Alive) }}"
+      - path: vm.defeat
+        operation: set
+        value: "{{ (@vm.birdsLeft <= 0) && (@vm.pig1Alive || @vm.pig2Alive || @vm.pig3Alive)
+          }}"
+      - path: vm.gameOver
+        operation: set
+        value: "{{ @vm.victory || @vm.defeat }}"
+      - path: vm.canLaunch
+        operation: set
+        value: "{{ (@vm.birdsLeft > 0) && !(@vm.victory || @vm.defeat) }}"
+- id: restart-key-manager
+  context: canvas
+  type: circle
+  position:
+    x: -60
+    y: -60
+  size:
+    radius: 1
+  style:
+    fillStyle: rgba(0,0,0,0)
+    strokeStyle: rgba(0,0,0,0)
+    lineWidth: 0
+  callbacks:
+    onKeyDown:
+      r: restart_game
+  actions:
+    restart_game:
+      restart: true
+domLayer:
+- id: ui-title
+  context: dom
+  type: div
+  position:
+    x: 16
+    y: 12
+  size:
+    width: 260
+    height: 26
+  properties:
+    text: ANGRY BIRDS
+  style:
+    color: "#FFFFFF"
+    fontSize: 24
+    fontWeight: bold
+    fontFamily: monospace
+- id: ui-score
+  context: dom
+  type: div
+  position:
+    x: 16
+    y: 44
+  size:
+    width: 280
+    height: 24
+  properties:
+    text: 'SCORE: {{ @vm.score }}'
+  style:
+    color: "#FFFDE7"
+    fontSize: 20
+    fontWeight: bold
+    fontFamily: monospace
+- id: ui-birds-left
+  context: dom
+  type: div
+  position:
+    x: 16
+    y: 70
+  size:
+    width: 280
+    height: 22
+  properties:
+    text: 'BIRDS LEFT: {{ @vm.birdsLeft }}'
+  style:
+    color: "#FFE082"
+    fontSize: 16
+    fontWeight: bold
+    fontFamily: monospace
+- id: ui-power
+  context: dom
+  type: div
+  position:
+    x: 16
+    y: 92
+  size:
+    width: 360
+    height: 20
+  properties:
+    text: 'POWER X: {{ @vm.vx }}  ARC Y: {{ @vm.vy }}'
+  style:
+    color: "#FFF3E0"
+    fontSize: 14
+    fontFamily: monospace
+- id: ui-start-hint
+  context: dom
+  type: div
+  position:
+    x: 16
+    y: 116
+  size:
+    width: 530
+    height: 22
+  showWhen:
+    "@vm.gameStarted": false
+    "@vm.gameOver": false
+  properties:
+    text: 'DRAG ON BIRD TO AIM   OR AIM: UP/DOWN + LEFT/RIGHT   LAUNCH: RELEASE/SPACE'
+  style:
+    color: "#F5F5F5"
+    fontSize: 12
+    fontFamily: monospace
+- id: ui-restart-hint
+  context: dom
+  type: div
+  position:
+    x: 16
+    y: 134
+  size:
+    width: 260
+    height: 20
+  properties:
+    text: 'RESTART ANY TIME: R'
+  style:
+    color: "#ECEFF1"
+    fontSize: 11
+    fontFamily: monospace
+- id: victory-banner
+  context: dom
+  type: div
+  position:
+    x: 188
+    y: 124
+  size:
+    width: 264
+    height: 62
+  showWhen:
+    "@vm.victory": true
+  properties:
+    text: VICTORY!
+  style:
+    fillStyle: rgba(40,120,30,0.76)
+    color: "#FFF59D"
+    fontSize: 52
+    fontWeight: bold
+    fontFamily: monospace
+- id: defeat-banner
+  context: dom
+  type: div
+  position:
+    x: 180
+    y: 124
+  size:
+    width: 280
+    height: 62
+  showWhen:
+    "@vm.defeat": true
+  properties:
+    text: OUT OF BIRDS
+  style:
+    fillStyle: rgba(120,30,30,0.76)
+    color: "#FFCDD2"
+    fontSize: 42
+    fontWeight: bold
+    fontFamily: monospace
+- id: restart-button
+  context: dom
+  type: div
+  position:
+    x: 252
+    y: 208
+  size:
+    width: 138
+    height: 38
+  showWhen:
+    "@vm.gameOver": true
+  properties:
+    text: RESTART
+  style:
+    fillStyle: "#2E7D32"
+    color: "#FFFFFF"
+    fontSize: 20
+    fontWeight: bold
+    fontFamily: monospace
+  callbacks:
+    onClick: restart_scene
+  actions:
+    restart_scene:
+      restart: true
